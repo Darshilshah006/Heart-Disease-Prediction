@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <title>Heart Disease Prediction</title>
+    <style>
+        
+       
+        .navbar{
+            background-color:#557C55;
+            
+        }
+        a{
+            color: #F2FFE9;
+            font-size: larger;
+        }
+        a:hover{
+            color: #F2FFE9;
+        }
+        body {
+            padding-top: 56px; /* Adjust this value to match the height of your navbar */
+        }
+       
+        h1{
+            font-size: 60px !important;
+            padding: 2rem;
+        }
+        
+        
+      
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label{
+            font-weight: bold;
+            font-size: 23px;
+            color: #73916a;
+            }
+        
+        #btnSubmit{
+            background-color:#17a2b8;
+            color:#fff;
+            border:none;
+            width:100%;
+            display:block;
+            text-align:center;
+            padding:10px;
+            cursor:pointer;
+            
+        }
+        
+        #btnSubmit:hover{
+            background-color:#3e8e41;
+        }
+        @media (max-width: 991px) {
+            body {
+                padding-top: 48px;
+            }
+        }
+        .validation-text {
+            display: block;
+            font-size: 22px;
+            margin-top: 5px;
+        }
+
+        .invalid {
+            border: 1px solid red; /* Add any specific styles for the invalid input here */
+        }
+        .column1{
+            float: left;
+            width: 50%;
+            padding: 10px;
+        }
+        .column2{
+            float: right;
+            width: 50%;
+            padding: 10px;
+        }
+        .main_content{
+            padding: 10px 50px;
+        }
+        .fill_btn{
+            font-family:Arial, Helvetica, sans-serif;
+            background-color: #A6CF98;
+            color: black;
+            border: 1px black;
+            padding: 10px 23px;
+            font-size: 20px;
+            font-weight: 400;
+            margin-right: 1.4rem;
+        }
+        .fill_btn:hover{
+            background-color: #557C55;
+            color: #F2FFE9;
+        }
+        .pre_btn{
+            padding: 10px 23px;
+            font-family:Arial, Helvetica, sans-serif;
+            background-color: #557C55;
+            color: #F2FFE9;
+            border: 1px white;
+            font-size: 20px;
+            font-weight: 400;
+            
+        }
+        .pre_btn:hover{
+            background-color: #A6CF98;
+            color: black;
+        }
+        .foot{
+            background-color: #FA7070;
+        }
+
+   
+        h1 {
+            padding-top:60px ;
+            text-align: center;
+            color: #333;
+        }
+
+        #predictionResult {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        p {
+            text-align: center;
+            color: #333;
+        }
+
+    
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        #userValues {
+            max-width: 400px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #557C55;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f2f2f2;
+        }
+        #predictionResult{
+            border: 2px #557C55 solid;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <a class="navbar-brand" href="#">Heart Disease Prediction</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/study">Study</a>
+                </li>
+                <!-- Add more navbar items as needed -->
+            </ul>
+        </div>
+    </nav>
+
+    <h1>Heart Disease Prediction Result</h1>
+    <div id="predictionResult">
+        <p>{{ prediction_text }}</p>
+    </div>
+
+    <div id="userValues">
+        <h2>User Entered Values</h2>
+        <table>
+            <tr>
+                <td>
+                    <strong>Field</strong>
+                </td>
+                <td>
+                    <strong>Value</strong>
+                </td>
+            </tr>
+            <tr>
+                <td>Age:</td>
+                <td>{{ user_values[0] }}</td>
+            </tr>
+            <tr>
+                <td>Sex:</td>
+                <td>{{ user_values[1] }}</td>
+            </tr>
+            <tr>
+                <td>Chest Pain Type:</td>
+                <td>{{ user_values[2] }}</td>
+            </tr>
+            <tr>
+                <td>Resting Blood Pressure:</td>
+                <td>{{ user_values[3] }}</td>
+            </tr>
+            <tr>
+                <td>Cholesterol:</td>
+                <td>{{ user_values[4] }}</td>
+            </tr>
+            <tr>
+                <td>Fasting Blood Sugar (FBS):</td>
+                <td>{{ user_values[5] }}</td>
+            </tr>
+            <tr>
+                <td>Resting ECG:</td>
+                <td>{{ user_values[6] }}</td>
+            </tr>
+            <tr>
+                <td>Maximum Heart Rate (thalach):</td>
+                <td>{{ user_values[7] }}</td>
+            </tr>
+            <tr>
+                <td>Exercise-Induced Angina (exang):</td>
+                <td>{{ user_values[8] }}</td>
+            </tr>
+            <tr>
+                <td>ST Depression (oldpeak):</td>
+                <td>{{ user_values[9] }}</td>
+            </tr>
+            <tr>
+                <td>Slope:</td>
+                <td>{{ user_values[10] }}</td>
+            </tr>
+            <tr>
+                <td>Number of Major Vessels (ca):</td>
+                <td>{{ user_values[11] }}</td>
+            </tr>
+            <tr>
+                <td>Thalassemia (thal):</td>
+                <td>{{ user_values[12] }}</td>
+            </tr>
+            <!-- Include more rows for other user-entered values -->
+        </table>
+    </div>
+    <footer class="footer foot mt-auto py-3">
+        <div class="container-fluid">
+          <span class="text-muted">@Machine Learning</span>
+        </div>
+      </footer>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Your existing head content here -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Heart Disease Prediction</title>
+    <style>
+        .navbar{
+            background-color:#557C55;
+            
+        }
+        a{
+            color: #F2FFE9;
+            font-size: larger;
+        }
+        a:hover{
+            color: #F2FFE9;
+        }
+        body {
+            padding-top: 56px; /* Adjust this value to match the height of your navbar */
+        }
+       
+        h1{
+            font-size: 60px !important;
+            padding: 2rem;
+        }
+        
+        
+      
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label{
+            font-weight: bold;
+            font-size: 23px;
+            color: #73916a;
+            }
+        
+        #btnSubmit{
+            background-color:#17a2b8;
+            color:#fff;
+            border:none;
+            width:100%;
+            display:block;
+            text-align:center;
+            padding:10px;
+            cursor:pointer;
+            
+        }
+        
+        #btnSubmit:hover{
+            background-color:#3e8e41;
+        }
+        @media (max-width: 991px) {
+            body {
+                padding-top: 48px;
+            }
+        }
+        .validation-text {
+            display: block;
+            font-size: 22px;
+            margin-top: 5px;
+        }
+
+        .invalid {
+            border: 1px solid red; /* Add any specific styles for the invalid input here */
+        }
+        .column1{
+            float: left;
+            width: 50%;
+            padding: 10px;
+        }
+        .column2{
+            float: right;
+            width: 50%;
+            padding: 10px;
+        }
+        .main_content{
+            padding: 10px 50px;
+        }
+        .fill_btn{
+            font-family:Arial, Helvetica, sans-serif;
+            background-color: #A6CF98;
+            color: black;
+            border: 1px black;
+            padding: 10px 23px;
+            font-size: 20px;
+            font-weight: 400;
+            margin-right: 1.4rem;
+        }
+        .fill_btn:hover{
+            background-color: #557C55;
+            color: #F2FFE9;
+        }
+        .pre_btn{
+            padding: 10px 23px;
+            font-family:Arial, Helvetica, sans-serif;
+            background-color: #557C55;
+            color: #F2FFE9;
+            border: 1px white;
+            font-size: 20px;
+            font-weight: 400;
+            
+        }
+        .pre_btn:hover{
+            background-color: #A6CF98;
+            color: black;
+        }
+        .foot{
+            background-color: #FA7070;
+        }
+
+    </style>
+</head>
+<body>  
+        
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <a class="navbar-brand" href="#">Heart Disease Prediction</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/study">Study</a>
+                </li>
+                <!-- Add more navbar items as needed -->
+            </ul>
+        </div>
+    </nav>
+
+    <div class="main_content container-fluid">
+       <center><h1>Heart Disease Prediction</h1></center> 
+        <form name="predictionForm" action="/predict" method="post" onsubmit="return validateForm()">
+            <div class="row">
+                <div class="column1 col-md-6">
+                    <div class="form-group">
+                        <label for="age">Age:</label>
+                        <input type="number" name="age" class="form-control" required min="0" max="90" oninput="validateInput(this, 'age')">
+                        <span class="validation-text" id="ageValidationText">Min: 0, Max: 90</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="sex">Sex (0 for Female, 1 for Male):</label>
+                        <input type="number" name="sex" class="form-control" required min="0" max="1" oninput="validateInput(this, 'sex')">
+                        <span class="validation-text" id="sexValidationText">Value should be 0 or 1</span>
+                    </div>
+                    
+                    <!-- Add similar structure for other input fields with their respective validation messages -->
+                    
+
+                    <div class="form-group">
+                        <label for="cp">Chest Pain Type:</label>
+                        <input type="number" name="cp" class="form-control" required min="0" max="3" oninput="validateInput(this, 'cp')">
+                        <span class="validation-text" id="cpValidationText">Value should be between 0 and 3</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="trestbps">Resting Blood Pressure:</label>
+                        <input type="number" name="trestbps" class="form-control" required oninput="validateBloodPressure(this)">
+                        <span class="validation-text" id="trestbpsValidationText">Please enter a valid blood pressure value</span>
+                    </div>
+                   
+                        <div class="form-group">
+                            <label for="chol">Cholesterol:</label>
+                            <input type="number" name="chol" class="form-control" required oninput="validateCholesterol(this.value, this, cholValidationText)">
+                            <span class="validation-text" id="cholValidationText">Please enter a valid cholesterol value</span>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="fbs">Fasting Blood Sugar (FBS):</label>
+                            <input type="number" name="fbs" class="form-control" required oninput="validateFastingBloodSugar(this)">
+                            <span class="validation-text" id="fbsValidationText">Please enter a valid fasting blood sugar value</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="restecg">Resting ECG:</label>
+                            <input type="number" name="restecg" class="form-control" required oninput="validateRestingECG(this)">
+                            <span class="validation-text" id="restecgValidationText">Please enter a valid resting ECG value</span>
+                        </div>
+
+                           </div>
+                            <div class="column2 col-md-6">
+
+                        <div class="form-group">
+                            <label for="thalach">Maximum Heart Rate (thalach):</label>
+                            <input type="number" name="thalach" class="form-control" required oninput="validateMaximumHeartRate(this)">
+                            <span class="validation-text" id="thalachValidationText">Please enter a valid maximum heart rate value</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="exang">Exercise-Induced Angina (exang):</label>
+                            <input type="number" name="exang" class="form-control" required oninput="validateExerciseInducedAngina(this)">
+                            <span class="validation-text" id="exangValidationText">Please enter a valid exercise-induced angina value</span>
+                        </div>
+
+                        
+                    <div class="form-group">
+                        <label for="oldpeak">ST Depression (oldpeak):</label>
+                        <input type="number" name="oldpeak" class="form-control" required oninput="validateInput(this, 'oldpeak')">
+                        <span class="validation-text" id="oldpeakValidationText">Please enter a valid number</span>
+                    </div>
+                    
+
+                    <div class="form-group">
+                        <label for="slope">Slope:</label>
+                        <input type="number" name="slope" class="form-control" required oninput="validateSlope(this)">
+                        <span class="validation-text" id="slopeValidationText">Please enter a valid slope value</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ca">Number of Major Vessels (ca):</label>
+                        <input type="number" name="ca" class="form-control" required oninput="validateVessels(this)">
+                        <span class="validation-text" id="caValidationText">Please enter a valid number of vessels</span>
+                    </div>
+                    
+
+                   
+                        
+                    
+                    
+                    
+                    <!-- Add more fields for the first column -->
+             
+
+               
+                
+              
+                
+               
+                
+              
+                
+                
+                <div class="form-group">
+                    <label for="thal">Thalassemia (thal):</label>
+                    <input type="number" name="thal" class="form-control" required oninput="validateThalassemia(this)">
+                    <span class="validation-text" id="thalValidationText">Please enter a valid thalassemia value</span>
+                </div>
+                  </div>
+            </div>
+
+            <!-- Button to fill in random values -->
+            <button type="button" onclick="fillRandomValues()" class="btn btn-primary fill_btn">Fill Random Values</button>
+
+            <!-- Submit button to predict the result -->
+            <button type="submit" class="btn btn-success pre_btn">Predict</button>
+        </form>
+
+        <!-- Display the prediction result here -->
+        <p>{{ prediction_text }}</p>
+    </div>
+
+    <footer class="footer foot mt-auto py-3">
+        <div class="container-fluid">
+          <span class="text-muted">@Machine Learning</span>
+        </div>
+      </footer>
+      
+    <script>
+function validateInput(input, fieldName) {
+    const validationText = document.getElementById(fieldName + 'ValidationText');
+    const value = parseFloat(input.value);
+
+    switch (fieldName) {
+        case 'age':
+            validateAge(value, input, validationText);
+            break;
+        case 'sex':
+            validateSex(value, input, validationText);
+            break;
+        case 'cp':
+            validateChestPainType(value, input, validationText);
+            break;
+        case 'oldpeak':
+            validateSTDepression(value, input, validationText);
+            break;
+        case 'slope':
+            validateSlope(value, input, validationText);
+            break;
+        case 'ca':
+            validateVessels(value, input, validationText);
+            break;
+        case 'trestbps':
+            validateBloodPressure(value, input, validationText);
+            break;
+            case 'chol':
+            validateCholesterol(value, input, validationText);
+            break;
+        case 'fbs':
+            validateFastingBloodSugar(value, input, validationText);
+            break;
+        case 'restecg':
+            validateRestingECG(value, input, validationText);
+            break;
+        case 'thalach':
+            validateMaxHeartRate(value, input, validationText);
+            break;
+        case 'exang':
+            validateExerciseInducedAngina(value, input, validationText);
+            break;
+        case 'thal':
+            validateThalassemia(value, input, validationText);
+            break;
+        // Add other field validation conditions here
+        default:
+            break;
+    }
+}
+function validateAge(value, input, validationText) {
+    if (value < 0 || value > 90 || isNaN(value)) {
+        input.classList.add('invalid');
+        validationText.style.color = 'red';
+    } else {
+        input.classList.remove('invalid');
+        validationText.style.color = 'initial';
+    }
+
+}
+function validateCholesterol(value, input, validationText) {
+    if (isNaN(value) || value < 0) {
+        input.classList.add('invalid'); // Adding the 'invalid' class to the input
+        validationText.style.color = 'red'; // Setting the text color to red
+    } else {
+        input.classList.remove('invalid'); // Removing the 'invalid' class from the input
+        validationText.style.color = 'initial'; // Setting the text color to its default color
+    }
+}
+function validateFastingBloodSugar(value, input, validationText) {
+    if (isNaN(value) || (value !== 0 && value !== 1)) {
+        input.classList.add('invalid');
+        validationText.style.color = 'red';
+    } else {
+        input.classList.remove('invalid');
+        validationText.style.color = 'initial';
+    }
+}
+
+function validateRestingECG(value, input, validationText) {
+    if (isNaN(value) || value < 0 || value > 2) {
+        input.classList.add('invalid');
+        validationText.style.color = 'red';
+    } else {
+        input.classList.remove('invalid');
+        validationText.style.color = 'initial';
+    }
+}
+
+function validateMaxHeartRate(value, input, validationText) {
+    if (isNaN(value) || value < 0 || value > 220) {
+        input.classList.add('invalid');
+        validationText.style.color = 'red';
+    } else {
+        input.classList.remove('invalid');
+        validationText.style.color = 'initial';
+    }
+}
+
+function validateExerciseInducedAngina(value, input, validationText) {
+    if (isNaN(value) || (value !== 0 && value !== 1)) {
+        input.classList.add('invalid');
+        validationText.style.color = 'red';
+    } else {
+        input.classList.remove('invalid');
+        validationText.style.color = 'initial';
+    }
+}
+
+function validateThalassemia(value, input, validationText) {
+    if (isNaN(value) || (value !== 3 && value !== 6 && value !== 7)) {
+        input.classList.add('invalid');
+        validationText.style.color = 'red';
+    } else {
+        input.classList.remove('invalid');
+        validationText.style.color = 'initial';
+    }
+}
+
+function validateSex(value, input, validationText) {
+    if (value !== 0 && value !== 1 || isNaN(value)) {
+        input.classList.add('invalid');
+        validationText.style.color = 'red';
+    } else {
+        input.classList.remove('invalid');
+        validationText.style.color = 'initial';
+    }
+}
+function validateChestPainType(value, input, validationText) {
+    if (value < 0 || value > 3 || isNaN(value)) {
+        input.classList.add('invalid');
+        validationText.style.color = 'red';
+    } else {
+        input.classList.remove('invalid');
+        validationText.style.color = 'initial';
+    }
+}
+
+function validateSTDepression(value, input, validationText) {
+    if (isNaN(value)) {
+        input.classList.add('invalid');
+        validationText.style.color = 'red';
+    } else {
+        input.classList.remove('invalid');
+        validationText.style.color = 'initial';
+    }
+}
+
+function validateSlope(input) {
+    const value = parseFloat(input.value);
+    const validationText = document.getElementById('slopeValidationText');
+
+    if (isNaN(value)) {
+        input.classList.add('invalid');
+        validationText.style.color = 'red';
+    } else {
+        input.classList.remove('invalid');
+        validationText.style.color = 'initial';
+    }
+}
+
+function validateVessels(input) {
+    const value = parseFloat(input.value);
+    const validationText = document.getElementById('caValidationText');
+
+    if (isNaN(value) || value < 0 || value > 3) {
+        input.classList.add('invalid');
+        validationText.style.color = 'red';
+    } else {
+        input.classList.remove('invalid');
+        validationText.style.color = 'initial';
+    }
+}
+
+function validateBloodPressure(input) {
+    const value = parseFloat(input.value);
+    const validationText = document.getElementById('trestbpsValidationText');
+
+    if (isNaN(value)) {
+        input.classList.add('invalid');
+        validationText.style.color = 'red';
+    } else {
+        input.classList.remove('invalid');
+        validationText.style.color = 'initial';
+    }
+}
+
+
+// Add separate functions for other fields (e.g., cholesterol, blood sugar, etc.)
+
+        function fillRandomValues() {
+            // Function to fill in random values for all input fields
+            document.forms["predictionForm"]["age"].value = Math.floor(Math.random() * 91); // Random age
+            document.forms["predictionForm"]["sex"].value = Math.round(Math.random()); // Random sex (0 or 1)
+            document.forms["predictionForm"]["cp"].value = Math.floor(Math.random() * 4); // Random chest pain type
+            document.forms["predictionForm"]["trestbps"].value = Math.floor(Math.random() * 200); // Random resting blood pressure
+            document.forms["predictionForm"]["chol"].value = Math.floor(Math.random() * 600); // Random cholesterol
+            document.forms["predictionForm"]["fbs"].value = Math.round(Math.random()); // Random fasting blood sugar
+            document.forms["predictionForm"]["restecg"].value = Math.floor(Math.random() * 3); // Random resting ECG
+            document.forms["predictionForm"]["thalach"].value = Math.floor(Math.random() * 220); // Random maximum heart rate
+            document.forms["predictionForm"]["exang"].value = Math.round(Math.random()); // Random exercise-induced angina
+            document.forms["predictionForm"]["oldpeak"].value = Math.round(Math.random() * 10); // Random ST depression
+            document.forms["predictionForm"]["slope"].value = Math.floor(Math.random() * 3)+1; // Random slope
+            document.forms["predictionForm"]["ca"].value = Math.floor(Math.random() * 5); // Random number of major vessels
+            document.forms["predictionForm"]["thal"].value = Math.floor(Math.random() * 3); // Random thalassemia
+
+        }
+        const validCombinations = [
+        { age: 45, sex: 1, cp: 2, trestbps: 130, chol: 220, fbs: 0, restecg: 1, thalach: 160, exang: 0, oldpeak: 1, slope: 2, ca: 1, thal: 3, target: 1 },
+        { age: 55, sex: 0, cp: 1, trestbps: 140, chol: 260, fbs: 1, restecg: 0, thalach: 145, exang: 1, oldpeak: 2.0, slope: 1, ca: 0, thal: 3, target: 0 },
+        { age: 60, sex: 1, cp: 3, trestbps: 150, chol: 200, fbs: 0, restecg: 2, thalach: 135, exang: 0, oldpeak: 0, slope: 3, ca: 2, thal: 7, target: 1 },
+        // Add more valid combinations as needed
+    ];
+    document.getElementById("testButton").addEventListener("click", function () {
+        // Randomly select one of the predefined valid combinations
+        const randomCombination = validCombinations[Math.floor(Math.random() * validCombinations.length)];
+
+        // Set the values for the input fields
+        for (const field in inputFields) {
+            inputFields[field].value = randomCombination[field];
+        }
+    });
+    </script>
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+ 
+
+</body>
+</html>
